@@ -26,6 +26,7 @@
       <x:String>GlobalVariablesNamespace</x:String>
       <x:String>GlobalConstantsNamespace</x:String>
       <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -69,9 +70,13 @@
       <AssemblyReference>System.CodeDom</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic.Forms</AssemblyReference>
       <AssemblyReference>Microsoft.VisualBasic.Core</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Create a project that asks for the user’s full name, store it and display only the first letter of the full name. Ask for the year of birth as well and calculate the age. Display the name and age in a window. At the same time, write the result of the execution to the Output Panel." DisplayName="ManagingVariables" sap:VirtualizedContainerService.HintSize="496,978.6666666666666" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Create a project that asks for the user’s full name, store it and display only the first letter of the full name. Ask for the year of birth as well and calculate the age. Display the name and age in a window. At the same time, write the result of the execution to the Output Panel." DisplayName="ManagingVariables" sap:VirtualizedContainerService.HintSize="450,1070.6666666666667" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="UserName" />
       <Variable x:TypeArguments="x:String" Name="YearOfBirth" />
@@ -83,24 +88,34 @@
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Ask User Name - Input Dialog" sap:VirtualizedContainerService.HintSize="434,246" sap2010:WorkflowViewState.IdRef="InputDialog_1" IsPassword="False" Label="Enter your full name!" Title="UserName">
+    <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Ask User Name - Input Dialog" sap:VirtualizedContainerService.HintSize="388,246" sap2010:WorkflowViewState.IdRef="InputDialog_1" IsPassword="False" Label="Enter your full name!" Title="UserName">
       <ui:InputDialog.Result>
         <OutArgument x:TypeArguments="x:String">[UserName]</OutArgument>
       </ui:InputDialog.Result>
     </ui:InputDialog>
-    <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Ask Year of Birth - Input Dialog" sap:VirtualizedContainerService.HintSize="434,246" sap2010:WorkflowViewState.IdRef="InputDialog_3" IsPassword="False" Label="Enter your year of Birth!" Title="Birth Year">
+    <ui:InputDialog Options="{x:Null}" OptionsString="{x:Null}" DisplayName="Ask Year of Birth - Input Dialog" sap:VirtualizedContainerService.HintSize="388,246" sap2010:WorkflowViewState.IdRef="InputDialog_3" IsPassword="False" Label="Enter your year of Birth!" Title="Birth Year">
       <ui:InputDialog.Result>
         <OutArgument x:TypeArguments="x:String">[YearOfBirth]</OutArgument>
       </ui:InputDialog.Result>
     </ui:InputDialog>
-    <Assign DisplayName="Assign - Calculate Age" sap:VirtualizedContainerService.HintSize="434,85.33333333333333" sap2010:WorkflowViewState.IdRef="Assign_1">
-      <Assign.To>
-        <OutArgument x:TypeArguments="x:Int32">[Age]</OutArgument>
-      </Assign.To>
-      <Assign.Value>
-        <InArgument x:TypeArguments="x:Int32">[Cint(Now.ToString("yyyy"))-Cint(YearOfBirth)]</InArgument>
-      </Assign.Value>
-    </Assign>
-    <WriteLine DisplayName="Write Line" sap:VirtualizedContainerService.HintSize="434,92" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[&quot;Hi &quot;+UserName+&quot;, your age is &quot;+ Age.ToString+&quot; years&quot;]" />
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Invoking the workflow for age calulator with in and out parameters&#xD;&#xA;" DisplayName="AgeCalculator.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="388,177.33333333333334" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="AgeCalculator.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="out_AgeInYears">
+          <VisualBasicReference x:TypeArguments="x:Int32" ExpressionText="Age" />
+        </OutArgument>
+        <InArgument x:TypeArguments="x:Int32" x:Key="in_YearOfBirth">
+          <VisualBasicValue x:TypeArguments="x:Int32" ExpressionText="Cint(YearOfBirth)" />
+        </InArgument>
+        <InArgument x:TypeArguments="x:Int32" x:Key="in_PresentYear">
+          <VisualBasicValue x:TypeArguments="x:Int32" ExpressionText="Cint(Now.ToString(&quot;yyyy&quot;))" />
+        </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:InvokeWorkflowFile>
+    <WriteLine DisplayName="Write Line" sap:VirtualizedContainerService.HintSize="388,92" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[&quot;Hi &quot;+UserName+&quot;, your age is &quot;+ Age.ToString+&quot; years&quot;]" />
   </Sequence>
 </Activity>
